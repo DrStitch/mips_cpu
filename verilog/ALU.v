@@ -30,7 +30,7 @@ module ALU(
     output reg CF,
     output reg Equal
 );
-    always @(*) begin
+    always begin
         case (S)
             0: begin Result = X << Y[4:0]; Result2 = 0; OF = 0; CF = 0; end
             1: begin Result = X >>> Y[4:0]; Result2 = 0; OF = 0; CF = 0; end
