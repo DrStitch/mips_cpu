@@ -29,5 +29,13 @@ module MEM(
 	in_r,
 	in_v0,
 	in_a0
+    out_pc,
+    out_ir,
+    out_signal,
+    out_dst,
+    out_d,
+    out_r,
+    out_v0,
+    out_a0
     );
 endmodule
