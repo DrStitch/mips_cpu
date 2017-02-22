@@ -23,29 +23,58 @@
 module main(
 
     );
+    wire [31:0] new_pc, if_pc, pc_4, if_ir, id_pc, id_ir, id_signal0;
     Register PC (.Data(new_pc), .Enable(~lu), .Clock(clk), .Output(if_pc));
-    wire [31:0] pc_4;
-    assign pc_4 = if_pc + 4;
     ROM Rom (.addr(if_pc[11:2]), .sel(1), .data(if_ir));
+    assign pc_4 = if_pc + 4;
 
     buffer IF_ID (clk(clk), .en(~lu), .clr(JB), .PC(if_pc), .IR(if_ir), .signal(32'h80000000), .dst(0), .R1_pos(0), .R2_pos(0),
         .D(0), .R1(0), .R2(0), .ALU_R(0), .ext(0), .v0(0), .a0(0),
-        .out_PC(id_pc), .out_IR(id_ir), .out_signal(ir_signal0), .out_dst(), .out_R1_pos(), .out_R2_pos(),
+        .out_PC(id_pc), .out_IR(id_ir), .out_signal(id_signal0), .out_dst(), .out_R1_pos(), .out_R2_pos(),
         .out_D(), .out_R1(), .out_R2(), .out_ALU_R(), .out_ext(), .out_v0(), .out_a0());
         
-    buffer ID_EX (clk(clk), .en(), .clr(), .PC(if_pc), .IR(if_ir), .signal(32'h80000000), .dst(0), .R1_pos(0), .R2_pos(0),
-        .D(0), .R1(0), .R2(0), .ALU_R(0), .ext(0), .v0(0), .a0(0),
-        .out_PC(id_pc), .out_IR(id_ir), .out_signal(ir_signal0), .out_dst(), .out_R1_pos(), .out_R2_pos(),
-        .out_D(), .out_R1(), .out_R2(), .out_ALU_R(), .out_ext(), .out_v0(), .out_a0());
+	wire [31:0] id_signal1, id_ext, id_r1, id_r2, id_v0, id_a0;
+	wire [31:0] ex_pc, ex_ir, ex_signal0, ex_r1, ex_r2, ex_ext, ex_v0, ex_a0;
+	wire [4:0] id_dst, ex_dst, ex_r1_pos, ex_r2_pos;
+	IR_circuit (.ir(id_ir), .signal(id_signal1));
+	assign id_RegDst = signal1[0];
+	assign id_jal = signal1[13];
+	assign id_syscall = signal1[13];
+	assign id_dst = id_jal ? 5'h1f : id_RegDst ? id_ir[15:11] : id_ir[20:16];
+	extender (.IR(id_ir), .result(id_ext));
+	regfile (.readReg1(id_ir[25:21]), .readReg2(id_ir[20:16]), .writeReg(), .Din(), .we(), .clk(clk),
+		.reg1(id_r1), .reg2(id_r2), .v0(id_v0), .a0(id_a0));
         
-    buffer EX_MEM (clk(clk), .en(), .clr(), .PC(if_pc), .IR(if_ir), .signal(32'h80000000), .dst(0), .R1_pos(0), .R2_pos(0),
-            .D(0), .R1(0), .R2(0), .ALU_R(0), .ext(0), .v0(0), .a0(0),
-            .out_PC(id_pc), .out_IR(id_ir), .out_signal(ir_signal0), .out_dst(), .out_R1_pos(), .out_R2_pos(),
-            .out_D(), .out_R1(), .out_R2(), .out_ALU_R(), .out_ext(), .out_v0(), .out_a0());
+        
+    buffer ID_EX (clk(clk), .en(1), .clr(JB|lu), .PC(id_pc), .IR(id_ir), .signal(id_signal0|id_signal1), .dst(id_dst), .R1_pos(id_ir[25:21]), .R2_pos(id_ir[20:16]),
+        .D(0), .R1(id_r1), .R2(id_r2), .ALU_R(0), .ext(id_ext), .v0(id_v0), .a0(id_a0),
+        .out_PC(ex_pc), .out_IR(ex_ir), .out_signal(ex_signal0), .out_dst(ex_dst), .out_R1_pos(ex_r1_pos), .out_R2_pos(ex_r2_pos),
+        .out_D(), .out_R1(ex_r1), .out_R2(ex_r2), .out_ALU_R(), .out_ext(ex_ext), .out_v0(ex_v0), .out_a0(ex_a0));
+		
+	wire [31:0] ex_signal1, ex_new_r1, ex_new_r2, ex_alu_r, ex_new_v0, ex_new_a0;
+	wire [31:0] mem_pc, mem_ir, mem_signal, mem_r2, mem_alu_r, mem_v0, mem_a0;
+    wire [4:0] mem_dst;
+	redirect (.data(ex_r1), .dst(ex_r1_pos), .wb_data(wb_data), .wb_dst(wb_dst), .wb_we(wb_we), .mem_data(mem_alu_r), .mem_dst(mem_dst), .mem_we(mem_we), .data_out(ex_new_r1));
+	redirect (.data(ex_r2), .dst(ex_r2_pos), .wb_data(wb_data), .wb_dst(wb_dst), .wb_we(wb_we), .mem_data(mem_alu_r), .mem_dst(mem_dst), .mem_we(mem_we), .data_out(ex_new_r2));
+	redirect (.data(ex_v0), .dst(5'h2), .wb_data(wb_data), .wb_dst(wb_dst), .wb_we(wb_we), .mem_data(mem_alu_r), .mem_dst(mem_dst), .mem_we(mem_we), .data_out(ex_new_v0));
+	redirect (.data(ex_a0), .dst(5'h4), .wb_data(wb_data), .wb_dst(wb_dst), .wb_we(wb_we), .mem_data(mem_alu_r), .mem_dst(mem_dst), .mem_we(mem_we), .data_out(ex_new_a0));
+    
+	assign ex_Branch = ex_signal0[1];
+	assign ex_Jmp = ex_signal0[2];
+	assign ex_AluSrc = ex_signal0[6];
+	assign ex_AluOp = ex_signal0[11:8];
+	assign ex_XSrcR2 = ex_signal0[12];
+	assign 
+	assign X = ex_XSrcR2
+        
+    buffer EX_MEM (clk(clk), .en(1), .clr(0), .PC(ex_pc), .IR(ex_ir), .signal(ex_signal1), .dst(ex_dst), .R1_pos(0), .R2_pos(0),
+        .D(0), .R1(ex_new_r1), .R2(ex_new_r2), .ALU_R(ex_alu_r), .ext(0), .v0(ex_new_v0), .a0(ex_new_a0),
+        .out_PC(mem_pc), .out_IR(mem_ir), .out_signal(mem_signal), .out_dst(mem_dst), .out_R1_pos(0), .out_R2_pos(0),
+        .out_D(), .out_R1(), .out_R2(mem_r2), .out_ALU_R(mem_alu_r), .out_ext(), .out_v0(mem_v0), .out_a0(mem_a0));
             
             
-    buffer MEM_WB (clk(clk), .en(), .clr(), .PC(if_pc), .IR(if_ir), .signal(32'h80000000), .dst(0), .R1_pos(0), .R2_pos(0),
-                .D(0), .R1(0), .R2(0), .ALU_R(0), .ext(0), .v0(0), .a0(0),
-                .out_PC(id_pc), .out_IR(id_ir), .out_signal(ir_signal0), .out_dst(), .out_R1_pos(), .out_R2_pos(),
-                .out_D(), .out_R1(), .out_R2(), .out_ALU_R(), .out_ext(), .out_v0(), .out_a0());
+    buffer MEM_WB (clk(clk), .en(1), .clr(0), .PC(mem_pc), .IR(mem_ir), .signal(mem_signal), .dst(mem_dst), .R1_pos(0), .R2_pos(0),
+        .D(), .R1(), .R2(), .ALU_R(mem_alu_r), .ext(0), .v0(mem_v0), .a0(mem_a0),
+        .out_PC(wb_pc), .out_IR(wb_ir), .out_signal(wb_signal), .out_dst(wb_dst), .out_R1_pos(0), .out_R2_pos(0),
+        .out_D(wb_d), .out_R1(), .out_R2(), .out_ALU_R(wb_alu_r), .out_ext(), .out_v0(wb_v0), .out_a0(wb_a0));
 endmodule

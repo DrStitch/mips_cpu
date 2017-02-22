@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2017/02/21 10:47:25
+// Create Date: 2017/02/22 16:02:31
 // Design Name: 
-// Module Name: ROM
+// Module Name: MEM
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,11 +20,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module ROM(
-    input [9:0] addr,
-    input sel,
-    output [31:0] data
+module MEM(
+	in_pc,
+	in_ir,
+	in_signal,
+	in_dst,
+	in_r2,
+	in_r,
+	in_v0,
+	in_a0
     );
-    reg [31:0] rom [0:2**10-1];
-    assign data = sel ? rom[addr] : 0;
 endmodule

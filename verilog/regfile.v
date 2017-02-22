@@ -30,9 +30,7 @@ module regfile(
     output [31:0] reg1,
     output [31:0] reg2,
     output [31:0] v0,
-    output [31:0] a0,
-    output [31:0] s2,
-    output [31:0] ra
+    output [31:0] a0
     );
     reg [31:0] registers [0:31];
     always @(negedge clk)
@@ -43,6 +41,4 @@ module regfile(
     assign reg2 = registers[readReg2];
     assign v0 = registers[2];
     assign a0 = registers[4];
-    assign s2 = registers[18];
-    assign ra = registers[31];
 endmodule
