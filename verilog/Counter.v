@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2017/02/21 10:47:25
+// Create Date: 2017/02/22 08:30:44
 // Design Name: 
-// Module Name: ROM
+// Module Name: Counter
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,11 +20,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module ROM(
-    input [9:0] addr,
-    input sel,
-    input [31:0] data
+module Counter
+#(parameter width = 32)
+(
+    input count,
+    input clk,
+    output reg [width-1:0] Output
     );
-    reg [31:0] rom [0:2**10-1];
-    assign data = sel ? rom[addr] : 0;
+    always @(posedge clk)
+        if (count)
+            Output = Output + 1;
 endmodule

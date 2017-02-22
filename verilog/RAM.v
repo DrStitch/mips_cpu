@@ -24,14 +24,15 @@ module RAM(
     input [9:0] addr,
     input [31:0] D_in,
     input str,
-    input sel,
     input clk,
     input ld,
-    input clr,
-    output [31:0] D_out
+    output reg [31:0] D_out
     );
-    reg [31:0] ram
+    reg [31:0] ram [0:2**10-1];
     always @(posedge clk) begin
         if (str)
-            
+            ram[addr] = D_in;
+        if (ld)
+            D_out = ram[addr];
+    end
 endmodule
