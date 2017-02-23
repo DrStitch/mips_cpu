@@ -24,26 +24,18 @@ module main(
 
     );
     wire [31:0] new_pc, if_pc, pc_4, if_ir, id_pc, id_ir, id_signal0;
-    Register PC (.Data(new_pc), .Enable(~lu), .Clock(clk), .Output(if_pc));
-    ROM Rom (.addr(if_pc[11:2]), .sel(1), .data(if_ir));
-    assign pc_4 = if_pc + 4;
+
+
+    IF( .lu(lu), .clk(clk), .new_pc(new_pc), .pc_4(if_pc), .ir(if_ir));
 
     buffer IF_ID (clk(clk), .en(~lu), .clr(JB), .PC(if_pc), .IR(if_ir), .signal(32'h80000000), .dst(0), .R1_pos(0), .R2_pos(0),
         .D(0), .R1(0), .R2(0), .ALU_R(0), .ext(0), .v0(0), .a0(0),
         .out_PC(id_pc), .out_IR(id_ir), .out_signal(id_signal0), .out_dst(), .out_R1_pos(), .out_R2_pos(),
         .out_D(), .out_R1(), .out_R2(), .out_ALU_R(), .out_ext(), .out_v0(), .out_a0());
         
-	wire [31:0] id_signal1, id_ext, id_r1, id_r2, id_v0, id_a0;
-	wire [31:0] ex_pc, ex_ir, ex_signal0, ex_r1, ex_r2, ex_ext, ex_v0, ex_a0;
-	wire [4:0] id_dst, ex_dst, ex_r1_pos, ex_r2_pos;
-	IR_circuit (.ir(id_ir), .signal(id_signal1));
-	assign id_RegDst = signal1[0];
-	assign id_jal = signal1[13];
-	assign id_syscall = signal1[13];
-	assign id_dst = id_jal ? 5'h1f : id_RegDst ? id_ir[15:11] : id_ir[20:16];
-	extender (.IR(id_ir), .result(id_ext));
-	regfile (.readReg1(id_ir[25:21]), .readReg2(id_ir[20:16]), .writeReg(), .Din(), .we(), .clk(clk),
-		.reg1(id_r1), .reg2(id_r2), .v0(id_v0), .a0(id_a0));
+        
+    ID( .clk(clk), .in_pc(), .in_ir(), .in_signal(), .rw(), .din(), .we(), 
+        .out_pc(), .out_ir(), .out_signal(), .dst(), .r1_pos(), .r2_pos(), .ext(), .r1(), .r2(), .v0(), .a0() );
         
         
     buffer ID_EX (clk(clk), .en(1), .clr(JB|lu), .PC(id_pc), .IR(id_ir), .signal(id_signal0|id_signal1), .dst(id_dst), .R1_pos(id_ir[25:21]), .R2_pos(id_ir[20:16]),

@@ -21,21 +21,22 @@
 
 
 module MEM(
-	in_pc,
-	in_ir,
-	in_signal,
-	in_dst,
-	in_r2,
-	in_r,
-	in_v0,
-	in_a0
-    out_pc,
-    out_ir,
-    out_signal,
-    out_dst,
-    out_d,
-    out_r,
-    out_v0,
-    out_a0
+    input clk,
+	input [31:0] in_signal,
+	input [31:0] in_r2,
+	input [31:0] in_r,
+    output [31:0] out_d
     );
+    wire [31:0] data;
+
+    assign MemRead = in_signal[4];
+    assign MemWrite = in_signal[5];
+    assign LH = in_signal[21];
+    
+    RAM (.addr(in_r[11:2]), .D_in(in_r2), .str(MemWrite), .clk(clk), .ld(MemRead), .D_out(data));
+    
+    assign out_d = ~LH ? data :
+                   in_r[1] ? data >>> 16 :
+                   {16{data[15]}, data[15:0]};
+    
 endmodule
