@@ -28,8 +28,6 @@ module EX(
     input [31:0] in_ir,
     input [31:0] in_signal,
     input [4:0] in_dst,
-	input [4:0] r1_pos,
-	input [4:0] r2_pos,
 	input [31:0] in_r1,
 	input [31:0] in_r2,
 	input [31:0] in_ext,
@@ -39,7 +37,7 @@ module EX(
 	output [31:0] out_pc,
 	output [31:0] out_ir,
 	output [31:0] out_signal,
-	output [5:0] out_dst,
+	output [4:0] out_dst,
 	output [31:0] out_r2,
 	output [31:0] out_r,
 	output [31:0] out_v0,
@@ -48,6 +46,7 @@ module EX(
     );
 	wire [3:0] AluOp;
 	wire [1:0] BranchSel;
+	wire [31:0] X, Y;
 	
 	assign out_pc = in_pc;
 	assign out_ir = in_ir;
@@ -67,11 +66,11 @@ module EX(
 	assign X = XSrcR2 ? in_r2 : in_r1;
 	assign Y = AluSrc ? in_ext : in_r2;
 	
-	ALU (.X(X), .Y(Y), .S(AluOp),
+	ALU i_ALU (.X(X), .Y(Y), .S(AluOp),
 		.Result(out_r), .Result2(), .OF(), .CF(), .Equal(equal));
 	
 	reg b;
-	always begin
+	always @(*) begin
 		case (BranchSel)
 			0: b = equal;
 			1: b = ~equal;
@@ -86,7 +85,7 @@ module EX(
 	assign out_signal[30] = Jmp | JR;
 	assign out_signal[31] = in_signal[31];
 	
-	always begin
+	always @(*) begin
 		if (JR)
 			new_pc = in_r1;
 		else if (Jmp) begin

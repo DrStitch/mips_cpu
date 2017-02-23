@@ -41,13 +41,20 @@ module MEM(
 	output mem_we
     );
     wire [31:0] data;
+    assign out_pc = in_pc;
+    assign out_ir = in_ir;
+    assign out_signal = in_signal;
+    assign out_dst = in_dst;
+    assign out_r = in_r;
+    assign out_v0 = in_v0;
+    assign out_a0 = in_a0;
 
 	assign mem_we = in_signal[7];
     assign MemRead = in_signal[4];
     assign MemWrite = in_signal[5];
     assign LH = in_signal[21];
     
-    RAM (.addr(in_r[11:2]), .D_in(in_r2), .str(MemWrite), .clk(clk), .ld(MemRead), .D_out(data));
+    RAM Ram (.addr(in_r[11:2]), .D_in(in_r2), .str(MemWrite), .clk(clk), .ld(MemRead), .D_out(data));
     
     assign out_d = ~LH ? data :
                    in_r[1] ? data >>> 16 :

@@ -28,12 +28,13 @@ module extender(
     assign sel[1] = ~IR[31] & ~IR[29] & ~IR[28] & ~IR[27] + ~IR[29] & ~IR[28] & ~IR[27] & ~IR[26] + IR[30] & ~IR[29] & ~IR[28] & ~IR[27];
     assign sel[0] = IR[27] + IR[28] + IR[29] & ~IR[26] + IR[31] & ~IR[30] & ~IR[29] & IR[26];
 	
-	always begin
+	always @(*)
+	begin
 		case (sel)
-			0: result = {{16{0}}, IR[15:0]};
+			0: result = {16'b0, IR[15:0]};
 			1: result = {{16{IR[15]}}, IR[15:0]};
 			2: result = {{27{IR[10]}}, IR[10:6]};
-			3: result = 0;
+			3: result = 32'b0;
 		endcase
 	end
 endmodule

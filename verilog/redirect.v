@@ -29,7 +29,7 @@ module redirect(
     input [31:0] mem_data,
     input [4:0] mem_dst,
     input mem_we,
-    output data_out
+    output [31:0] data_out
     );
     assign data_out = ~|dst ? 0 :
                       (dst === mem_dst) & mem_we ? mem_data :

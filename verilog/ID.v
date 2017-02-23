@@ -44,7 +44,7 @@ module ID(
     assign out_pc = in_pc;
     assign out_ir = in_ir;
 
-    IR_circuit (.ir(in_ir), .signal(signal));
+    IR_circuit i_IR_circuit (.ir(in_ir), .signal(signal));
     assign out_signal = in_signal | signal;
     
     assign RegDst = signal[0];
@@ -54,7 +54,7 @@ module ID(
     assign r1_pos = in_ir[25:21];
     assign r2_pos = in_ir[20:16];
     
-    extender (.IR(in_ir), .result(ext));
-    regfile (.readReg1(r1_pos), .readReg2(r2_pos), .writeReg(rw), .Din(din), .we(we), .clk(clk),
+    extender i_extender (.IR(in_ir), .result(ext));
+    regfile i_regfile (.readReg1(r1_pos), .readReg2(r2_pos), .writeReg(rw), .Din(din), .we(we), .clk(clk),
         .reg1(r1), .reg2(r2), .v0(v0), .a0(a0));
 endmodule

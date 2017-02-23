@@ -44,5 +44,5 @@ module WB(
                       in_r;
                       
     assign clk = Clock & ~(syscall & (in_v0 === 32'h0000_000a));
-    Register ( .Data(in_a0), .Enable(syscall & (in_v0 !== 32'h0000_000a)), .Clock(clk), .Output(display));
+    Register i_Register ( .Data(in_a0), .Enable(syscall & (in_v0 !== 32'h0000_000a)), .Clock(clk), .Output(display));
 endmodule

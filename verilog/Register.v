@@ -26,7 +26,7 @@ module Register
     input [width-1:0] Data,
     input Enable,
     input Clock,
-    output reg [31:0] Output
+    output reg [width-1:0] Output
 );
     always @(posedge Clock)
         if (Enable)
