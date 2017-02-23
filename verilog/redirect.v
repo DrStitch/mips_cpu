@@ -32,7 +32,7 @@ module redirect(
     output data_out
     );
     assign data_out = ~|dst ? 0 :
-                      (dst === mem_dst) & mem_en ? mem_data :
-                      (dst === wb_dst) & wb_en ? wb_data :
+                      (dst === mem_dst) & mem_we ? mem_data :
+                      (dst === wb_dst) & wb_we ? wb_data :
                       data;
 endmodule

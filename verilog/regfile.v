@@ -37,8 +37,8 @@ module regfile(
         if (we)
             registers[writeReg] = Din;
             
-    assign reg1 = registers[readReg1];
-    assign reg2 = registers[readReg2];
+    assign reg1 = |readReg1 ? registers[readReg1] : 0;
+    assign reg2 = |readReg2 ? registers[readReg2] : 0;
     assign v0 = registers[2];
     assign a0 = registers[4];
 endmodule

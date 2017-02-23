@@ -29,17 +29,20 @@ module WB(
     input [31:0] in_v0,
     input [31:0] in_a0,
     output [31:0] out_data,
+	output out_we,
     output [31:0] display,
     output clk
     );
-    assign MemtoReg = signal[3]
-    assign JAL = signal[13];
-    assign syscall = signal[15];
+
+	assign out_we = in_signal[7];
+    assign MemtoReg = in_signal[3];
+    assign JAL = in_signal[13];
+    assign syscall = in_signal[15];
     
     assign out_data = JAL ? in_pc :
                       MemtoReg ? in_d :
                       in_r;
                       
     assign clk = Clock & ~(syscall & (in_v0 === 32'h0000_000a));
-    Register ( .Data(in_a0), .Enable(syscall & (in_v0 !== 32'h0000_000a), .Clock(clk), .Output(display));
+    Register ( .Data(in_a0), .Enable(syscall & (in_v0 !== 32'h0000_000a)), .Clock(clk), .Output(display));
 endmodule

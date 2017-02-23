@@ -21,7 +21,8 @@
 
 
 module EX(
-    input [31:0] clk,
+    input clk,
+    input lu,
     input [31:0] in_pc,
 	input [31:0] in_pc_4,
     input [31:0] in_ir,
@@ -42,8 +43,8 @@ module EX(
 	output [31:0] out_r2,
 	output [31:0] out_r,
 	output [31:0] out_v0,
-	output [31:0] out_a0
-	
+	output [31:0] out_a0,
+	output JB
     );
 	wire [3:0] AluOp;
 	wire [1:0] BranchSel;
@@ -54,12 +55,13 @@ module EX(
 	assign out_r2 = in_r2;
 	assign out_v0 = in_v0;
 	assign out_a0 = in_a0;
+	assign JB = JR | Jmp | b;
 	
-	assign Branch = in_signal0[1];
-	assign Jmp = in_signal0[2];
-	assign AluSrc = in_signal0[6];
-	assign AluOp = in_signal0[11:8];
-	assign XSrcR2 = in_signal0[12];
+	assign Branch = in_signal[1];
+	assign Jmp = in_signal[2];
+	assign AluSrc = in_signal[6];
+	assign AluOp = in_signal[11:8];
+	assign XSrcR2 = in_signal[12];
 	assign JR = in_signal[14];
 	assign BranchSel = in_signal[20:19];
 	assign X = XSrcR2 ? in_r2 : in_r1;
@@ -92,7 +94,7 @@ module EX(
 			new_pc[27:2] = in_ir[25:0];
 			new_pc[31:28] = in_pc[31:28];
 		end else if (b)
-			new_pc = in_pc + {14{in_ir[15]}, in_ir[15:0], 0, 0};
+			new_pc = in_pc + {{14{in_ir[15]}}, in_ir[15:0], 0, 0};
 		else
 			new_pc = in_pc_4;
 	end

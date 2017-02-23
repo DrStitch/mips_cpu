@@ -40,6 +40,7 @@ module ID(
     output [31:0] v0,
     output [31:0] a0
     );
+    wire [31:0] signal;
     assign out_pc = in_pc;
     assign out_ir = in_ir;
 
