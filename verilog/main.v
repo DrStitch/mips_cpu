@@ -25,24 +25,23 @@ module main(
     );
 	wire [31:0] if_pc, if_ir;
 
-	wire [31:0] id_pc_1, id_ir_1, id_signal_1, id_d_1, id_r1_1, id_r2_1, id_r_1, id_ext_1, id_v0_1, id_a0_1;
-	wire [4:0] id_dst_1, id_r1_pos_1, id_r2_pos_1;
-	wire [31:0] id_pc_2, id_ir_2, id_signal_2, id_d_2, id_r1_2, id_r2_2, id_r_2, id_ext_2, id_v0_2, id_a0_2;
+	wire [31:0] id_pc_1, id_ir_1, id_signal_1;
+	wire [31:0] id_pc_2, id_ir_2, id_signal_2, id_r1_2, id_r2_2, id_ext_2, id_v0_2, id_a0_2;
 	wire [4:0] id_dst_2, id_r1_pos_2, id_r2_pos_2;
 	
-	wire [31:0] ex_pc_1, ex_ir_1, ex_signal_1, ex_d_1, ex_r1_1, ex_r2_1, ex_r_1, ex_ext_1, ex_v0_1, ex_a0_1;
+	wire [31:0] ex_pc_1, ex_ir_1, ex_signal_1, ex_r1_1, ex_r2_1, ex_ext_1, ex_v0_1, ex_a0_1;
 	wire [4:0] ex_dst_1, ex_r1_pos_1, ex_r2_pos_1;
-	wire [31:0] ex_pc_2, ex_ir_2, ex_signal_2, ex_d_2, ex_r1_2, ex_r2_2, ex_r_2, ex_ext_2, ex_v0_2, ex_a0_2;
-	wire [4:0] ex_dst_2, ex_r1_pos_2, ex_r2_pos_2;
+	wire [31:0] ex_pc_2, ex_ir_2, ex_signal_2, ex_r2_2, ex_r_2, ex_v0_2, ex_a0_2;
+	wire [4:0] ex_dst_2;
 	wire [31:0] ex_new_r1, ex_new_r2, ex_new_v0, ex_new_a0;
 	
-	wire [31:0] mem_pc_1, mem_ir_1, mem_signal_1, mem_d_1, mem_r1_1, mem_r2_1, mem_r_1, mem_ext_1, mem_v0_1, mem_a0_1;
-	wire [4:0] mem_dst_1, mem_r1_pos_1, mem_r2_pos_1;
-	wire [31:0] mem_pc_2, mem_ir_2, mem_signal_2, mem_d_2, mem_r1_2, mem_r2_2, mem_r_2, mem_ext_2, mem_v0_2, mem_a0_2;
-	wire [4:0] mem_dst_2, mem_r1_pos_2, mem_r2_pos_2;
+	wire [31:0] mem_pc_1, mem_ir_1, mem_signal_1, mem_r2_1, mem_r_1, mem_v0_1, mem_a0_1;
+	wire [4:0] mem_dst_1;
+	wire [31:0] mem_pc_2, mem_ir_2, mem_signal_2, mem_d_2, mem_r_2, mem_v0_2, mem_a0_2;
+	wire [4:0] mem_dst_2;
 	
-	wire [31:0] wb_pc_1, wb_ir_1, wb_signal_1, wb_d_1, wb_r1_1, wb_r2_1, wb_r_1, wb_ext_1, wb_v0_1, wb_a0_1;
-	wire [4:0] wb_dst_1, wb_r1_pos_1, wb_r2_pos_1;
+	wire [31:0] wb_pc_1, wb_ir_1, wb_signal_1, wb_d_1, wb_r_1, wb_v0_1, wb_a0_1;
+	wire [4:0] wb_dst_1;
 
     wire [31:0] new_pc, wb_data, display;
     

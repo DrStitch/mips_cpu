@@ -25,7 +25,7 @@ module Counter
 (
     input count,
     input clk,
-    output reg [width-1:0] Output
+    output reg [width-1:0] Output = 0
     );
     always @(posedge clk)
         if (count)

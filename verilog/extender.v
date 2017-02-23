@@ -22,7 +22,7 @@
 
 module extender(
     input [31:0] IR,
-    output reg [31:0] result
+    output reg [31:0] result = 0
     );
     wire [1:0] sel;
     assign sel[1] = ~IR[31] & ~IR[29] & ~IR[28] & ~IR[27] + ~IR[29] & ~IR[28] & ~IR[27] & ~IR[26] + IR[30] & ~IR[29] & ~IR[28] & ~IR[27];

@@ -24,11 +24,11 @@ module ALU(
     input [31:0] X,
     input [31:0] Y,
     input [3:0] S,
-    output reg [31:0] Result,
-    output reg [31:0] Result2,
-    output reg OF,
-    output reg CF,
-    output reg Equal
+    output reg [31:0] Result = 0,
+    output reg [31:0] Result2 = 0,
+    output reg OF = 0,
+    output reg CF = 0,
+    output reg Equal = 0
 );
     always @(*) begin
         case (S)

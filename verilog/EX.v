@@ -33,7 +33,7 @@ module EX(
 	input [31:0] in_ext,
 	input [31:0] in_v0,
 	input [31:0] in_a0,
-	output reg [31:0] new_pc,
+	output reg [31:0] new_pc = 0,
 	output [31:0] out_pc,
 	output [31:0] out_ir,
 	output [31:0] out_signal,
@@ -69,14 +69,14 @@ module EX(
 	ALU i_ALU (.X(X), .Y(Y), .S(AluOp),
 		.Result(out_r), .Result2(), .OF(), .CF(), .Equal(equal));
 	
-	reg b;
+	reg b = 0;
 	always @(*) begin
-		case (BranchSel)
-			0: b = equal;
-			1: b = ~equal;
-			2: b = out_r[0];
-			3: b = 0;
-		endcase
+        case (BranchSel)
+            0: b = Branch & equal;
+            1: b = Branch & ~equal;
+            2: b = Branch & out_r[0];
+            3: b = Branch & 0;
+        endcase
 	end
 	
 	assign out_signal[27:0] = in_signal[27:0];
@@ -93,7 +93,7 @@ module EX(
 			new_pc[27:2] = in_ir[25:0];
 			new_pc[31:28] = in_pc[31:28];
 		end else if (b)
-			new_pc = in_pc + {{14{in_ir[15]}}, in_ir[15:0], 0, 0};
+			new_pc = in_pc + {{14{in_ir[15]}}, in_ir[15:0], 2'b0};
 		else
 			new_pc = in_pc_4;
 	end

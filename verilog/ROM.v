@@ -27,5 +27,5 @@ module ROM(
     );
     reg [31:0] rom [0:2**10-1];
     assign data = sel ? rom[addr] : 0;
-    initial $readmemh("D:\\mips_cpu\\verilog\\benchmark.hex", rom);
+    initial $readmemh("C:\\Users\\Administrator\\Desktop\\mips_cpu\\verilog\\test.hex", rom);
 endmodule
