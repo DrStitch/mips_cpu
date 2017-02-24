@@ -21,7 +21,9 @@
 
 
 module main(
-	input Clock
+	input Clock,
+	output [7:0] digitalLocation,
+    output [7:0] digitalStates
     );
 	wire [31:0] if_pc, if_ir;
 
@@ -45,7 +47,14 @@ module main(
 
     wire [31:0] new_pc, wb_data, display;
     
-    wire wb_we, mem_we, lu, JB, clk;
+    wire wb_we, mem_we, lu, JB;
+    
+    wire clk1M, clk1K, clk100, clk;
+	wire [7:0] digit_Location, digit_States;
+    div10hz i_div1(Clock, clk1M);
+    div1000hz i_div2(clk1M, clk1K);
+    div10hz i_div3(clk1K, clk100);
+    Display i_display (clk1K, display, digitalLocation, digitalStates);
 	
     IF i_IF ( .lu(lu), .clk(clk), .new_pc(new_pc), .pc_4(if_pc), .ir(if_ir));
 
@@ -91,7 +100,7 @@ module main(
         .out_PC(wb_pc_1), .out_IR(wb_ir_1), .out_signal(wb_signal_1), .out_dst(wb_dst_1), .out_R1_pos(), .out_R2_pos(),
         .out_D(wb_d_1), .out_R1(), .out_R2(), .out_ALU_R(wb_r_1), .out_ext(), .out_v0(wb_v0_1), .out_a0(wb_a0_1));
 		
-	WB i_WB ( .Clock(Clock), .in_pc(wb_pc_1), .in_signal(wb_signal_1), .in_d(wb_d_1), .in_r(wb_r_1),
+	WB i_WB ( .Clock(clk100), .in_pc(wb_pc_1), .in_signal(wb_signal_1), .in_d(wb_d_1), .in_r(wb_r_1),
 		.in_v0(wb_v0_1), .in_a0(wb_a0_1), .out_data(wb_data), .out_we(wb_we), .display(display), .clk(clk) );
 		
 endmodule
