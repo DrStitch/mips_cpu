@@ -87,7 +87,7 @@ module main(
 
 	load_use i_load_use ( .dst(ex_r2_pos_1), .memRead(ex_signal_1[4]), .R1(id_r1_pos_2), .R2(id_r2_pos_2), .syscall(id_signal_2[15]), .lu(lu) );
         
-    buffer EX_MEM (.clk(clk), .en(1'b1), .clr(0), .PC(ex_pc_2), .IR(ex_ir_2), .signal(ex_signal_2), .dst(ex_dst_2), .R1_pos(5'b0), .R2_pos(5'b0),
+    buffer EX_MEM (.clk(clk), .en(1'b1), .clr(1'b0), .PC(ex_pc_2), .IR(ex_ir_2), .signal(ex_signal_2), .dst(ex_dst_2), .R1_pos(5'b0), .R2_pos(5'b0),
         .D(0), .R1(0), .R2(ex_r2_2), .ALU_R(ex_r_2), .ext(0), .v0(ex_v0_2), .a0(ex_a0_2),
         .out_PC(mem_pc_1), .out_IR(mem_ir_1), .out_signal(mem_signal_1), .out_dst(mem_dst_1), .out_R1_pos(), .out_R2_pos(),
         .out_D(), .out_R1(), .out_R2(mem_r2_1), .out_ALU_R(mem_r_1), .out_ext(), .out_v0(mem_v0_1), .out_a0(mem_a0_1));
@@ -97,7 +97,7 @@ module main(
             
             
     buffer MEM_WB (.clk(clk), .en(1'b1), .clr(0), .PC(mem_pc_2), .IR(mem_ir_2), .signal(mem_signal_2), .dst(mem_dst_2), .R1_pos(5'b0), .R2_pos(5'b0),
-        .D(0), .R1(0), .R2(0), .ALU_R(mem_r_2), .ext(0), .v0(mem_v0_2), .a0(mem_a0_2),
+        .D(mem_d_2), .R1(0), .R2(0), .ALU_R(mem_r_2), .ext(0), .v0(mem_v0_2), .a0(mem_a0_2),
         .out_PC(wb_pc_1), .out_IR(wb_ir_1), .out_signal(wb_signal_1), .out_dst(wb_dst_1), .out_R1_pos(), .out_R2_pos(),
         .out_D(wb_d_1), .out_R1(), .out_R2(), .out_ALU_R(wb_r_1), .out_ext(), .out_v0(wb_v0_1), .out_a0(wb_a0_1));
 		

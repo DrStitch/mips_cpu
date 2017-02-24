@@ -26,13 +26,12 @@ module RAM(
     input str,
     input clk,
     input ld,
-    output reg [31:0] D_out
+    output [31:0] D_out
     );
     reg [31:0] ram [0:2**10-1];
     always @(posedge clk) begin
         if (str)
             ram[addr] = D_in;
-        if (ld)
-            D_out = ram[addr];
     end
+    assign D_out = ld ? ram[addr] : 32'b0;
 endmodule

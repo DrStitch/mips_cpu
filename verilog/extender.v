@@ -25,8 +25,8 @@ module extender(
     output reg [31:0] result = 0
     );
     wire [1:0] sel;
-    assign sel[1] = ~IR[31] & ~IR[29] & ~IR[28] & ~IR[27] + ~IR[29] & ~IR[28] & ~IR[27] & ~IR[26] + IR[30] & ~IR[29] & ~IR[28] & ~IR[27];
-    assign sel[0] = IR[27] + IR[28] + IR[29] & ~IR[26] + IR[31] & ~IR[30] & ~IR[29] & IR[26];
+    assign sel[1] = ~IR[31] & ~IR[29] & ~IR[28] & ~IR[27] | ~IR[29] & ~IR[28] & ~IR[27] & ~IR[26] | IR[30] & ~IR[29] & ~IR[28] & ~IR[27];
+    assign sel[0] = IR[27] | IR[28] | IR[29] & ~IR[26] | IR[31] & ~IR[30] & ~IR[29] & IR[26];
 	
 	always @(*)
 	begin

@@ -57,7 +57,7 @@ module buffer(
             if (clr) begin
                 out_IR = 0;
                 out_signal = 0;
-            end else
+            end else begin
                 out_IR = IR;
                 out_signal = signal;
             end
@@ -72,4 +72,5 @@ module buffer(
             out_v0 = v0;
             out_a0 = a0;
         end
+    end
 endmodule
