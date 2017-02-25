@@ -25,6 +25,7 @@ module Display(
     input [31:0] numbers,
     output [7:0] digit_Location, digit_States
     );
+
       function [7:0] numberToDigit;
       input [3:0] number;
         case (number) 

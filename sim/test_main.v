@@ -25,5 +25,5 @@ module test_main;
     
     main MAIN (Clock);
     always
-        #5 Clock = ~Clock;
+        #20 Clock = ~Clock;
 endmodule

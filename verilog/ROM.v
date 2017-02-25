@@ -27,5 +27,5 @@ module ROM(
     );
     reg [31:0] rom [0:2**10-1];
     assign data = sel ? rom[addr] : 0;
-    initial $readmemh("C:\\Users\\Administrator\\Desktop\\mips_cpu\\sim\\benchmark.hex", rom);
+    initial $readmemh("/home/stitch/vivado/cpu/mips_cpu/sim/benchmark.hex", rom);
 endmodule

@@ -21,40 +21,28 @@
 
 module div1000hz(
     input CLK,
-    output reg clk2
+    output clk2
     );
-    integer n=0;
+    reg [9:0] count = 0;
     always @(posedge CLK)
-    begin
-        if(n<99999)//变化1000000次
-        begin
-            n<=n+1;
-            clk2<=1'b0;
-        end
-        else//CLK每变化1000000次，clk2才变化一次
-        begin
-            n<=0;
-            clk2<=1'b1;
-        end
-    end
+        if (count == 999)
+            count = 0;
+        else
+            count = count + 1;
+        
+    assign clk2 = count >= 500;
 endmodule
 
 module div10hz(
     input CLK,
-    output reg clk1
+    output clk1
     );
-    integer m=0;
+    reg [3:0] count = 0;
     always @(posedge CLK)
-    begin
-        if(m<999999)
-            begin
-                m<=m+1;
-                clk1<=1'b0;
-            end
+        if (count == 9)
+            count = 0;
         else
-            begin
-                m<=0;
-                clk1<=1'b1;
-            end
-    end
+            count = count + 1;
+        
+    assign clk1 = count >= 5;
 endmodule
