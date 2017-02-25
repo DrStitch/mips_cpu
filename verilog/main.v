@@ -22,6 +22,11 @@
 
 module main(
 	input Clock,
+	input disp_total,
+	input disp_j,
+	input disp_b,
+	input disp_lu,
+	input disp_cycle,
 	output [7:0] digitalLocation,
     output [7:0] digitalStates
     );
@@ -45,9 +50,11 @@ module main(
 	wire [31:0] wb_pc_1, wb_ir_1, wb_signal_1, wb_d_1, wb_r_1, wb_v0_1, wb_a0_1;
 	wire [4:0] wb_dst_1;
 
-    wire [31:0] new_pc, wb_data, display;
+    wire [31:0] new_pc, wb_data, result;
     
     wire wb_we, mem_we, lu, JB;
+    
+    wire [31:0] count_total, count_j, count_b, count_lu, count_cycle, display;
     
     wire clk;
     wire clk10K, clk1K, clk10;
@@ -55,7 +62,20 @@ module main(
     div10hz i_div3(clk10K, clk1K);
     div10hz i_div4(clk1K, clk100);
     div1000hz i_div2(clk10K, clk10);
+    
+    assign display = disp_cycle ? count_cycle :
+                     disp_lu ? count_lu :
+                     disp_b ? count_b :
+                     disp_j ? count_j :
+                     disp_total ? count_total :
+                     result;
     Display i_display (clk100, display, digitalLocation, digitalStates);
+    
+	Counter i_total (mem_signal_1[31], clk, count_total);
+	Counter i_j (mem_signal_1[30], clk, count_j);
+	Counter i_b (mem_signal_1[29], clk, count_b);
+	Counter i_lu (mem_signal_1[28], clk, count_lu);
+	Counter i_cycle (1'b1, clk, count_cycle);
 	
     IF i_IF ( .lu(lu), .clk(clk), .new_pc(new_pc), .pc_4(if_pc), .ir(if_ir));
 
@@ -102,6 +122,6 @@ module main(
         .out_D(wb_d_1), .out_R1(), .out_R2(), .out_ALU_R(wb_r_1), .out_ext(), .out_v0(wb_v0_1), .out_a0(wb_a0_1));
 		
 	WB i_WB ( .Clock(clk10), .in_pc(wb_pc_1), .in_signal(wb_signal_1), .in_d(wb_d_1), .in_r(wb_r_1),
-		.in_v0(wb_v0_1), .in_a0(wb_a0_1), .out_data(wb_data), .out_we(wb_we), .display(display), .clk(clk) );
+		.in_v0(wb_v0_1), .in_a0(wb_a0_1), .out_data(wb_data), .out_we(wb_we), .display(result), .clk(clk) );
 		
 endmodule
