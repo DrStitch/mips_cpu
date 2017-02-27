@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2017/02/21 10:47:25
+// Create Date: 02/26/2017 07:28:04 PM
 // Design Name: 
-// Module Name: ROM
+// Module Name: d_flipflop
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,12 +20,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module ROM(
-    input [9:0] addr,
-    input sel,
-    output [31:0] data
+module d_flipflop(
+    input clk,
+    input data,
+    input clr,
+    output reg Q = 0
     );
-    reg [31:0] rom [0:2**10-1];
-    assign data = sel ? rom[addr] : 0;
-    initial $readmemh("/home/stitch/vivado/cpu/mips_cpu/sim/result.hex", rom);
+    always @(posedge clr, posedge clk) begin
+        if (clr)
+            Q <= 0;
+        else if (clk)
+            Q <= data;
+    end
 endmodule

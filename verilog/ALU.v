@@ -33,7 +33,7 @@ module ALU(
     always @(*) begin
         case (S)
             0: begin Result = X << Y[4:0]; Result2 = 0; OF = 0; CF = 0; end
-            1: begin Result = X >>> Y[4:0]; Result2 = 0; OF = 0; CF = 0; end
+            1: begin Result = $signed(X) >>> Y[4:0]; Result2 = 0; OF = 0; CF = 0; end
             2: begin Result = X >> Y[4:0]; Result2 = 0; OF = 0; CF = 0; end
             3: begin {Result2, Result} = X * Y; OF = 0; CF = 0; end
             4: begin Result = X / Y; Result2 = X % Y; OF = 0; CF = 0; end
@@ -46,7 +46,7 @@ module ALU(
             11: begin Result = $signed(X) < $signed(Y); Result2 = 0; OF = 0; CF = 0; end
             12: begin Result = X < Y; Result2 = 0; OF = 0; CF = 0; end
             13: begin Result = Y << X[4:0]; Result2 = 0; OF = 0; CF = 0; end
-            14: begin Result = Y >>> X[4:0]; Result2 = 0; OF = 0; CF = 0; end
+            14: begin Result = $signed(Y) >>> X[4:0]; Result2 = 0; OF = 0; CF = 0; end
             15: begin Result = $signed(X) <= 0; Result2 = 0; OF = 0; CF = 0; end
         endcase
         Equal = X === Y;

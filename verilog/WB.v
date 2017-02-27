@@ -28,6 +28,7 @@ module WB(
     input [31:0] in_r,
     input [31:0] in_v0,
     input [31:0] in_a0,
+    input [31:0] in_cp0,
     output [31:0] out_data,
 	output out_we,
     output [31:0] display,
@@ -38,8 +39,10 @@ module WB(
     assign MemtoReg = in_signal[3];
     assign JAL = in_signal[13];
     assign syscall = in_signal[15];
+    assign mfc0 = in_signal[16];
     
-    assign out_data = JAL ? in_pc :
+    assign out_data = mfc0 ? in_cp0 :
+                      JAL ? in_pc :
                       MemtoReg ? in_d :
                       in_r;
                       

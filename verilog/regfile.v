@@ -33,6 +33,7 @@ module regfile(
     output [31:0] a0
     );
     reg [31:0] registers [0:31];
+    initial registers[29] = 0;
     always @(negedge clk)
         if (we)
             registers[writeReg] = Din;

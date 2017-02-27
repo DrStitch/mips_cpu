@@ -63,7 +63,7 @@ module IR_circuit(
     
     wire [1:0] Branch_sel;
     assign Branch_sel = ir[27:26];
-    assign lh = ir[27];
+    assign lh = ~ir[27];
     
     assign signal[0] = RegDst;
     assign signal[1] = Branch;

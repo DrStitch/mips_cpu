@@ -37,6 +37,7 @@ module buffer(
     input [31:0] ext,
     input [31:0] v0,
     input [31:0] a0,
+    input [31:0] cp0,
     output reg [31:0] out_PC = 0,
     output reg [31:0] out_IR = 0,
     output reg [31:0] out_signal = 0,
@@ -49,7 +50,8 @@ module buffer(
     output reg [31:0] out_ALU_R = 0,
     output reg [31:0] out_ext = 0,
     output reg [31:0] out_v0 = 0,
-    output reg [31:0] out_a0 = 0
+    output reg [31:0] out_a0 = 0,
+    output reg [31:0] out_cp0 = 0
     );
     always @(posedge clk) begin
         if (en) begin
@@ -71,6 +73,7 @@ module buffer(
             out_ext = ext;
             out_v0 = v0;
             out_a0 = a0;
+            out_cp0 = cp0;
         end
     end
 endmodule

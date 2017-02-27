@@ -46,3 +46,11 @@ module div10hz(
         
     assign clk1 = count >= 5;
 endmodule
+
+module div2hz(
+    input CLK,
+    output reg clk = 0
+    );
+    always @(posedge CLK)
+        clk = ~clk;
+endmodule
